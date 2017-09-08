@@ -1,6 +1,6 @@
 package controller;
 
-import model.Books;
+import model.Book;
 import model.Student;
 
 /**
@@ -8,7 +8,7 @@ import model.Student;
  */
 public class LibrarianController implements ILibrarian {
     @Override
-    public void addBooks(Books books) {
+    public void addBooks(Book books) {
 
     }
 
@@ -23,7 +23,7 @@ public class LibrarianController implements ILibrarian {
     }
 
     @Override
-    public Books[]  viewBooks() {
-return new Books[] {};
+    public Book[]  viewBooks() {
+return new Book[] {};
     }
 }

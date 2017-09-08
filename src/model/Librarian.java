@@ -3,21 +3,35 @@ package model;
 /**
  * Created by user on 06.09.2017.
  */
-public class Librarian extends User {
+public class Librarian  {
+    private long id;
+    private String name;
+    private String password;
     private String email;
     private String address;
     private String city;
     private long number;
 
-    public Librarian() {
-    }
-
     public Librarian(long id, String name, String password, String email, String address, String city, long number) {
-        super(id, name, password);
+        this.id = id;
+        this.name = name;
+        this.password = password;
         this.email = email;
         this.address = address;
         this.city = city;
         this.number = number;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public String getEmail() {
@@ -39,7 +53,10 @@ public class Librarian extends User {
     @Override
     public String toString() {
         return "Librarian{" +
-                "email='" + email + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
                 ", address='" + address + '\'' +
                 ", city='" + city + '\'' +
                 ", number=" + number +
