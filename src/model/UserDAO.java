@@ -8,19 +8,25 @@ import java.util.Objects;
 /**
  * Created by user on 11.09.2017.
  */
-public class UserDAO<T> {
-    private T[] array = (T[]) new Object[5];
+public class UserDAO<T extends User> {
+    private T[] array = (T[]) new User[5];
+    //private User user;
 
     public T[] getArray() {
         return array;
     }
 
-    public void validate(T t) throws Exception {
+    public  void validate(T t) throws Exception {
         int countNull = 0;
-        for (T el : array) {
+        for (int i = 0; i < array.length; i++) {
+            if(array[i] == null){
+                countNull++;
+            }
+        }
+       /* for (T el : array) {
             if (el == null)
                 countNull++;
-        }
+        }*/
         if (countNull == 0) {
             throw new InternalServerException("Method add in  class failed to complete ");
         }
@@ -40,7 +46,7 @@ public class UserDAO<T> {
         for (int i = 0; i < array.length; i++) {
             if (array[i] == null) {
                 array[i] = t;
-                System.out.println("User added successfully!");
+                System.out.println("User " + t.getUserType() + " added successfully!" );
                 break;
             }
         }
@@ -53,11 +59,11 @@ public class UserDAO<T> {
                 countFullPosition++;
             }
         }
-        T[] arrayEmpty = (T[]) new Object[0];
+        T[] arrayEmpty = (T[]) new User[0];
         if(countFullPosition == 0)
             return arrayEmpty;
 
-        T[] userList = (T[])new Object[countFullPosition];
+        T[] userList = (T[])new User[countFullPosition];
         int index = 0;
         for (T el : array) {
             if(el != null){
@@ -81,6 +87,7 @@ public class UserDAO<T> {
 
 
     public void deleteUser(T t) throws Exception {
+        checkLoginUser(t);
         findObjectInDB(array, t);
         for (int i = 0; i < array.length; i++) {
             if (array[i] != null && array[i].equals(t)) {
@@ -90,5 +97,14 @@ public class UserDAO<T> {
             }
         }
     }
+
+    public boolean checkLoginUser(T t) throws Exception{
+
+        if(!(t.getLoginType() == LoginType.AUTH))
+            throw new BadRequestException("Try again enter");
+        return true;
+    }
+
+
 
 }

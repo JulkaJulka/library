@@ -19,12 +19,25 @@ public class Demo {
 
         LibrarianDAO librarianDAO = new LibrarianDAO();
         BooksDAO booksDAO = new BooksDAO();
-        UserDAO userDAO = new UserDAO();
+
+        User user1 = new User(1,"Mykola","qwerty",LoginType.AUTH,UserType.ADMIN);
+        User user2 = new User(1,"Tetyana","qwerty1",LoginType.NONAUTH,UserType.LIBRARIAN);
+        User user3 = new User(2,"Tetyana","qwerty2",LoginType.NONAUTH,UserType.LIBRARIAN);
+        User user4 = new User(3,"Tetyana","qwerty3",LoginType.NONAUTH,UserType.LIBRARIAN);
+
+        UserDAO<User> userDAO1 = new UserDAO<>();
+        UserDAO<User> userDAO2 = new UserDAO<>();
+        userDAO1.addUser(user1);
+
+        System.out.println("---Test0");
+        System.out.println(Arrays.toString(userDAO1.viewUsers()));
 
         Book book1 = new Book(1, "2@a6","Java", "Sierra","Znanie",0, new Date(),null, null);
         Book book2 = new Book(2, "2@a689908","Java", "Sierra","Znanie",0, new Date(),null, null);
         Student student1 = new Student(1001,"Yuliia", 979107799, null, 0);
         Student student2 = new Student(1002,"Oleg", 979107799, null, 0);
+
+
 
         System.out.println("---Test21_addBook");
         booksDAO.addBook(book1);
@@ -111,26 +124,31 @@ public class Demo {
        // System.out.println(Arrays.toString(librarianDAO.viewLibrarian()));
 
         System.out.println("---Test31_UserDaO addUser viewUser");
-        userDAO.addUser(admin1);
-        System.out.println(Arrays.toString(userDAO.viewUsers()));
-        userDAO.addUser(librarian5);
-        System.out.println(Arrays.toString(userDAO.viewUsers()));
-        System.out.println();
-        userDAO.addUser(book1);
-        System.out.println(Arrays.toString(userDAO.viewUsers()));
+        userDAO2.addUser(user2);
+        userDAO2.addUser(user3);
+        userDAO2.addUser(user4);
+        System.out.println(Arrays.toString(userDAO2.getArray()));
+        user3.loginUser(userDAO2,"Tetyana", "qwerty1");
+        System.out.println("****");
+        System.out.println(user3);
+        System.out.println("***");
+        userDAO2.deleteUser(user3);
+
+
+
 
         System.out.println("---Test32_UserDaO deleteUser delete not existing User");
         try{
-            userDAO.deleteUser(librarian6);
+            userDAO2.deleteUser(user3);
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
         System.out.println();
 
-        System.out.println("---Test32_UserDaO deleteUser delete existing User");
+        /*System.out.println("---Test32_UserDaO deleteUser delete existing User");
         userDAO.deleteUser(admin1);
         userDAO.deleteUser(librarian5);
-        System.out.println(Arrays.toString(userDAO.viewUsers()));
+        System.out.println(Arrays.toString(userDAO.viewUsers()));*/
 
 
     }
