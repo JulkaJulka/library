@@ -33,16 +33,6 @@ public class User {
             } }
         }
 
-   /* public void loginUser(String name, String password) {
-        for (int i = 0; i < userDAO.getArray().length; i++) {
-            if (userDAO.getArray() != null &&
-                    !(userDAO.getArray()[i] == null) &&
-                    userDAO.getArray()[i].getName().equals(name) &&
-                    userDAO.getArray()[i].getPassword().equals(password)) {
-                setLoginType(LoginType.AUTH);
-                break;
-            }
-        }}*/
 
     public long getId() {
         return id;
