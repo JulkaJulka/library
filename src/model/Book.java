@@ -11,20 +11,18 @@ public class Book {
     private String nameOfBook;
     private String nameOfAuthor;
     private String publisher;
-    private int quantity;
     private int issued;
     private Date added;
     private Student student;
     private Date issuedDate;
 
     public Book(long id, String callNo, String nameOfBook, String nameOfAuthor, String publisher,
-                int quantity, int issued, Date added, Student student, Date issuedDate) {
+                 int issued, Date added, Student student, Date issuedDate) {
         this.id = id;
         this.callNo = callNo;
         this.nameOfBook = nameOfBook;
         this.nameOfAuthor = nameOfAuthor;
         this.publisher = publisher;
-        this.quantity = quantity;
         this.issued = issued;
         this.added = added;
         this.student = student;
@@ -51,10 +49,6 @@ public class Book {
         return publisher;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
     public int getIssued() {
         return issued;
     }
@@ -75,13 +69,18 @@ public class Book {
         this.issuedDate = issuedDate;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
 
     public void setStudent(Student student) {
         this.student = student;
 
+    }
+
+    public void setBookId(long id) {
+        this.id = id;
+    }
+
+    public void setBookCallNo(String callNo) {
+        this.callNo = callNo;
     }
 
     public void setIssued(int issued) {
@@ -96,11 +95,23 @@ public class Book {
                 ", nameOfBook='" + nameOfBook + '\'' +
                 ", nameOfAuthor='" + nameOfAuthor + '\'' +
                 ", publisher='" + publisher + '\'' +
-                ", quantity=" + quantity +
                 ", issued=" + issued +
                 ", added=" + added +
                 ", student=" + student +
                 ", issuedDate=" + issuedDate +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Book book = (Book) o;
+
+        if (id != book.id) return false;
+        return callNo != null ? callNo.equals(book.callNo) : book.callNo == null;
+
+    }
+
 }

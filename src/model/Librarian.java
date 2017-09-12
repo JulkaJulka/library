@@ -62,4 +62,20 @@ public class Librarian  {
                 ", number=" + number +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Librarian librarian = (Librarian) o;
+
+        return id == librarian.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
+    }
 }

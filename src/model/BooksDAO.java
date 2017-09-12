@@ -14,6 +14,7 @@ public class BooksDAO {
     public Book[] getArrayBooks() {
         return books;
     }
+
     public void validate(Book book) throws Exception {
         int countNull = 0;
         for (Book bk : books) {
@@ -27,7 +28,20 @@ public class BooksDAO {
 
     }
 
-    public void addBook(Book book) throws  Exception {
+    public boolean presenceBookInStudent(Student student, Book book) throws Exception {
+        if (book.equals(null))
+            throw new BadRequestException("Wrong Book");
+        if (student.getBooks() == null)
+            return false;
+        for (int i = 0; i < student.getBooks().length; i++) {
+            if (student.getBooks()[i] != null && student.getBooks()[i].equals(book)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addBook(Book book) throws Exception {
         if (book == null)
             throw new BadRequestException("Wrong Book");
         validate(book);
@@ -35,10 +49,10 @@ public class BooksDAO {
             if (bk != null && bk.equals(book))
                 throw new BadRequestException("Book with id " + book.getId() + " is already exist." +
                         " Method add failed to complete.");
-    }
+        }
         for (int i = 0; i < books.length; i++) {
             if (books[i] == null) {
-               books[i] = book;
+                books[i] = book;
                 System.out.println("Book with id " + book.getId() + " added successfully!");
                 break;
             }
@@ -47,43 +61,54 @@ public class BooksDAO {
     }
 
 
-    public void issueBook(long id, Student student) {
+    public void issueBook(Book book, Student student) throws Exception {
        /* for (Book bk: books) {
             if(bk.getId() == book.getId() && bk.getStudent() == null){
                 bk.getStudent() = student;
             }*/
-        for (int i = 0; i < books.length ; i++) {
-            if(books[i] != null && books[i].getStudent() == null && books[i].getId() == id){
+        if (presenceBookInStudent(student, book))
+            throw new BadRequestException("Student already has such book");
+        for (int i = 0; i < books.length; i++) {
+            if (books[i] != null && books[i].getStudent() == null
+                    && books[i].equals(book)) {
                 books[i].setStudent(student);
                 books[i].setIssued(books[i].getIssued() + 1);
-                books[i].setQuantity(books[i].getQuantity() - 1);
                 books[i].setIssuedDate(new Date());
-                student.setBookCallNo( books[i].getCallNo());
-                student.setBookId(books[i].getId());
-                System.out.println("Book with id " + id + " issued successfully!");
-            } else
-           if( books[i] != null && books[i].getStudent() != null && books[i].getId() == id){
-               System.out.println("Book is not available now");
-           }
+                for (int j = 0; j < student.getBooks().length; j++) {
+                    if (student.getBooks()[i] == null) {
+                        student.getBooks()[i] = book;
+                        break;
+                    }
+                }
+                System.out.println("Book with id " + book.getId() + " issued successfully!");
+            } else if (books[i] != null && books[i].getStudent() != null && books[i].equals(book)) {
+                System.out.println("Book is not available now");
+            }
         }
 
     }
 
 
-    public void returnBook(Student student, long returnBookId) {
+    public void returnBook(Student student, Book returnBook) throws Exception {
+        if (!presenceBookInStudent(student, returnBook))
+            throw new BadRequestException("User hasn't such book with id " + returnBook.getId());
         for (int i = 0; i < books.length; i++) {
             if (books[i] != null && books[i].getStudent() != null &&
-                    books[i].getId() == student.getBookId() &&
+                    books[i].equals(returnBook) &&
                     books[i].getStudent() == student) {
                 books[i].setStudent(null);
                 books[i].setIssued(books[i].getIssued() - 1);
-                books[i].setQuantity(books[i].getQuantity() + 1);
                 books[i].setIssuedDate(null);
-                student.setBookCallNo(null);
-                student.setBookId(0);
-                System.out.println("Book with id " + returnBookId + " returned successfully!");
-            }
-        }
+                for (int j = 0; j < student.getBooks().length; j++) {
+                    if (student.getBooks()[i] != null && student.getBooks()[i].equals(returnBook)) {
+                        student.getBooks()[i] = null;
+                        break;
+                    }
+                }
+                //student.setBookCallNo(null);
+                //student.setBookId(0);
+                System.out.println("Book with id " + returnBook.getId() + " returned successfully!");
+
 
 
     /*public Book[]  viewBooks() {
@@ -106,5 +131,7 @@ public class BooksDAO {
         }
         return bookList;
     }*/
+            }
+        }
     }
 }

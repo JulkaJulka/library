@@ -1,4 +1,4 @@
-package model;
+package bkp;
 
 import java.util.Date;
 
@@ -7,7 +7,7 @@ import java.util.Date;
  */
 public class IssuedBooks{
     private long id;
-    private Books book;
+    private Book book;
     private Student student;
     private Date issuedDate;
 
