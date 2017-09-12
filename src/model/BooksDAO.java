@@ -62,10 +62,7 @@ public class BooksDAO {
 
 
     public void issueBook(Book book, Student student) throws Exception {
-       /* for (Book bk: books) {
-            if(bk.getId() == book.getId() && bk.getStudent() == null){
-                bk.getStudent() = student;
-            }*/
+
         if (presenceBookInStudent(student, book))
             throw new BadRequestException("Student already has such book");
         for (int i = 0; i < books.length; i++) {
@@ -105,32 +102,9 @@ public class BooksDAO {
                         break;
                     }
                 }
-                //student.setBookCallNo(null);
-                //student.setBookId(0);
+
                 System.out.println("Book with id " + returnBook.getId() + " returned successfully!");
 
-
-
-    /*public Book[]  viewBooks() {
-        int countFullPosition = 0;
-        for (Book bk:books) {
-            if(bk != null){
-                countFullPosition++;
-            }
-        }
-        if(countFullPosition == 0)
-            return new Book[] {};
-
-        Book[] bookList = new Book[countFullPosition];
-        int index = 0;
-        for (Book bk:books) {
-            if(bk!= null){
-                bookList[index] = bk;
-                index++;
-            }
-        }
-        return bookList;
-    }*/
             }
         }
     }
