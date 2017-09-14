@@ -1,5 +1,7 @@
 package model;
 
+import exception.BadRequestException;
+
 /**
  * Created by user on 12.09.2017.
  */
@@ -8,7 +10,7 @@ public class User {
     private String name;
     private String password;
     User[] users = new User[5];
-    private UserDAO userDAO = new UserDAO();
+    private UserDAO userDAO;
     private Librarian librarian;
     private Admin admin;
     private LoginType loginType;
@@ -32,6 +34,12 @@ public class User {
                 break;
             } }
         }
+    public boolean checkLoginUser(User user) throws Exception{
+
+        if(!(user.getLoginType() == LoginType.AUTH))
+            throw new BadRequestException("You are not authorized.Try again please");
+        return true;
+    }
 
 
     public long getId() {
@@ -67,8 +75,13 @@ public class User {
 
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public void setLoginType(LoginType loginType) {
         this.loginType = loginType;
+
     }
 
     @Override

@@ -10,7 +10,8 @@ import java.util.Objects;
  */
 public class UserDAO<T extends User> {
     private T[] array = (T[]) new User[5];
-    //private User user;
+    private User loginUser;
+
 
     public T[] getArray() {
         return array;
@@ -18,22 +19,23 @@ public class UserDAO<T extends User> {
 
     public  void validate(T t) throws Exception {
         int countNull = 0;
-        for (int i = 0; i < array.length; i++) {
+       /* for (int i = 0; i < array.length; i++) {
             if(array[i] == null){
                 countNull++;
             }
-        }
-       /* for (T el : array) {
+        }*/
+        for (T el : array) {
             if (el == null)
                 countNull++;
-        }*/
+        }
         if (countNull == 0) {
             throw new InternalServerException("Method add in  class failed to complete ");
         }
 
     }
 
-    public void addUser(T t) throws Exception {
+    public void addUser(T t, User loginUser) throws Exception {
+        checkLoginUser(loginUser);
         if (t == null)
             throw new BadRequestException("Wrong user");
         validate(t);
@@ -52,7 +54,8 @@ public class UserDAO<T extends User> {
         }
     }
 
-    public T[] viewUsers() {
+    public T[] viewUsers(User loginUser) throws Exception{
+        checkLoginUser(loginUser);
         int countFullPosition = 0;
         for (T el : array) {
             if(el != null){
@@ -86,8 +89,8 @@ public class UserDAO<T extends User> {
 
 
 
-    public void deleteUser(T t) throws Exception {
-        checkLoginUser(t);
+    public void deleteUser(T t, User loginUser) throws Exception {
+        checkLoginUser(loginUser);
         findObjectInDB(array, t);
         for (int i = 0; i < array.length; i++) {
             if (array[i] != null && array[i].equals(t)) {
@@ -98,11 +101,24 @@ public class UserDAO<T extends User> {
         }
     }
 
-    public boolean checkLoginUser(T t) throws Exception{
+    public boolean checkLoginUser(User loginUser) throws Exception{
 
-        if(!(t.getLoginType() == LoginType.AUTH))
+        if(!(loginUser.getLoginType() == LoginType.AUTH))
             throw new BadRequestException("Try again enter");
         return true;
+    }
+
+    public  void resetPasswordForLibrarian(T toUserNeedChangePassword, String newPassword, T loginUser) throws Exception{
+        checkLoginUser(loginUser);
+        if(loginUser.getUserType() == UserType.LIBRARIAN)
+            throw new Exception("A method is not accessible to you");
+        for (int i = 0; i < array.length ; i++) {
+            if(array[i].equals(toUserNeedChangePassword) ){
+                toUserNeedChangePassword.setPassword(newPassword);
+                System.out.println("Password changed successfully!!!");
+                break;
+            }
+        }
     }
 
 
